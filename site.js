@@ -17,9 +17,9 @@ window.addEventListener(
     taxonomy.addEventListener("click", downloadTaxonomy, false);
 
     const observations = document.getElementById("observations");
-    observations.innerHTML =
-      `Download Ebird Observations Data in United States` +
-      `(${YEAR_START.format("l")} to ${TODAY.format("l")})`;
+    observations.innerHTML = `Download Ebird Observations Data in United States`;
+    // `(${YEAR_START.format("l")} to ${TODAY.format("l")})`;
+
     observations.addEventListener("click", downloadObservations, false);
 
     const subregions = document.getElementById("subregions");
@@ -39,51 +39,58 @@ function downloadTaxonomy() {
     .then((data) => download("ebird-taxonomy.csv", data));
 }
 
+// function downloadObservations() {
+//   let startDate = YEAR_START,
+//     endDate = TODAY,
+//     duration = moment.duration(endDate.diff(startDate));
+
+//   alert("This may take a few minutes...and may miss multiple days of data");
+//   let days = duration.asDays();
+//   let urls = [];
+//   let fetches = [];
+//   let allData = [];
+
+//   for (let i = 0; i <= days; i++) {
+//     let year = startDate.year(),
+//       month = startDate.month() + 1,
+//       day = startDate.date();
+//     urls.push(
+//       `https://api.ebird.org/v2/data/obs/US/historic/${year}/${month}/${day}`
+//     );
+//     startDate.add(1, "day");
+//   }
+
+//   urls.forEach((url) => {
+//     fetches.push(
+//       fetch(url, {
+//         headers: JSON_HEADER,
+//       })
+//         .then((res) => {
+//           if (res.ok) {
+//             return res.json();
+//           } else {
+//             return Promise.resolve([]);
+//           }
+//         })
+//         .then((data) => {
+//           allData.push(...data);
+//         })
+//     );
+//   });
+
+//   Promise.all(fetches).then(() => {
+//     const { Parser } = window["json2csv"];
+//     const json2csvParser = new Parser();
+//     const csv = json2csvParser.parse(allData);
+//     download("ebird-obs-current-year.csv", csv);
+//   });
+// }
+
 function downloadObservations() {
-  let startDate = YEAR_START,
-    endDate = TODAY,
-    duration = moment.duration(endDate.diff(startDate));
-
-  alert("This may take a few minutes...and may miss multiple days of data");
-  let days = duration.asDays();
-  let urls = [];
-  let fetches = [];
-  let allData = [];
-
-  for (let i = 0; i <= days; i++) {
-    let year = startDate.year(),
-      month = startDate.month() + 1,
-      day = startDate.date();
-    urls.push(
-      `https://api.ebird.org/v2/data/obs/US/historic/${year}/${month}/${day}`
-    );
-    startDate.add(1, "day");
-  }
-
-  urls.forEach((url) => {
-    fetches.push(
-      fetch(url, {
-        headers: JSON_HEADER,
-      })
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          } else {
-            return Promise.resolve([]);
-          }
-        })
-        .then((data) => {
-          allData.push(...data);
-        })
-    );
-  });
-
-  Promise.all(fetches).then(() => {
-    const { Parser } = window["json2csv"];
-    const json2csvParser = new Parser();
-    const csv = json2csvParser.parse(allData);
-    download("ebird-obs-current-year.csv", csv);
-  });
+  window.open(
+    "https://select-top-4.github.io/ebird-data-exploration/current_year_obs.csv",
+    "_blank"
+  );
 }
 
 function downloadSubRegions() {
@@ -95,7 +102,7 @@ function downloadSubRegions() {
 }
 
 function downloadBoundary() {
-  alert("This may take a few minutes...");
+  alert("This may take a few seconds...");
 
   let urls = [];
   let fetches = [];
