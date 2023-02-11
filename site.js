@@ -9,9 +9,6 @@ JSON_HEADER.append("x-ebirdapitoken", PUBLIC_KEY);
 
 const TODAY = moment();
 const YEAR_START = moment().startOf("year");
-let startDate = YEAR_START,
-  endDate = TODAY,
-  duration = moment.duration(endDate.diff(startDate));
 
 window.addEventListener(
   "load",
@@ -43,6 +40,10 @@ function downloadTaxonomy() {
 }
 
 function downloadObservations() {
+  let startDate = YEAR_START,
+    endDate = TODAY,
+    duration = moment.duration(endDate.diff(startDate));
+
   alert("This may take a few minutes...and may miss multiple days of data");
   let days = duration.asDays();
   let urls = [];
