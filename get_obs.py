@@ -5,7 +5,8 @@ import time
 
 PUBLIC_KEY = "obk3lno5ptmj"
 TODAY = date.today()
-YEAR_START = date(TODAY.year, 1, 1)
+# YEAR_START = date(TODAY.year, 1, 1)
+YEAR_START = date(TODAY.year, 2, 12)
 DAYS = (TODAY - YEAR_START).days
 SUBREGIONS = ["US-AL", "US-AK", "US-AZ", "US-AR", "US-CA", "US-CO", "US-CT", "US-DE",
 "US-DC", "US-FL", "US-GA", "US-HI", "US-ID", "US-IL", "US-IN", "US-IA", "US-KS",
@@ -77,7 +78,7 @@ def get_obs_current_year():
 
 def convert_json_to_csv(data):
     df = pd.DataFrame(data)
-    df.to_csv('current_year_obs.csv', encoding='utf-8', index=False)
+    df.to_csv('current_year_obs2.csv', encoding='utf-8', index=False)
 
 data = get_obs_current_year()
 convert_json_to_csv(data)
