@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS species (
     scientific_name VARCHAR(256),
     common_name VARCHAR(256),
     species_description TEXT,
-    species_img BLOB,
+    species_img_link VARCHAR(1024),
     extinct BOOLEAN,
     extinct_year YEAR,
     PRIMARY KEY (species_code),
@@ -33,6 +33,10 @@ CREATE TABLE IF NOT EXISTS ebird_user (
 CREATE TABLE IF NOT EXISTS subnational1 (
 	subnational1_code INT, 
     subnational1_name VARCHAR(256) NOT NULL,
+    min_x DECIMAL(8,6),
+    max_x DECIMAL(8,6),
+    min_y DECIMAL(9,6),
+    max_y DECIMAL(9,6),
     PRIMARY KEY (subnational1_code)
 );
 
@@ -44,12 +48,12 @@ CREATE TABLE IF NOT EXISTS subnational2 (
     FOREIGN KEY (subnational1_code) REFERENCES subnational1(subnational1_code)
 );
 
-CREATE TABLE IF NOT EXISTS location (
+CREATE TABLE IF NOT EXISTS ebird_location (
 	location_id INT,
     subnational2_code INT,
     location_name VARCHAR(512),
     latitude DECIMAL(8,6),
-    lon DECIMAL(9,6),
+    longitude DECIMAL(9,6),
     location_private BOOLEAN,
     PRIMARY KEY (location_id),
     FOREIGN KEY (subnational2_code) REFERENCES subnational2(subnational2_code)
@@ -67,5 +71,5 @@ CREATE TABLE IF NOT EXISTS observation (
 	PRIMARY KEY (observation_id),
     FOREIGN KEY (species_code) REFERENCES species(species_code),
     FOREIGN KEY (user_id) REFERENCES ebird_user(user_id),
-    FOREIGN KEY (location_id) REFERENCES location(location_id)
+    FOREIGN KEY (location_id) REFERENCES ebird_location(location_id)
 );
