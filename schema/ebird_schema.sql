@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS ebird_location (
 CREATE TABLE IF NOT EXISTS observation (
 	observation_id VARCHAR(16),
     species_code VARCHAR(16),
-    user_id VARCHAR(16),
+    user_id VARCHAR(128),
     location_id VARCHAR(16),
     observation_date DATE,
     observation_count SMALLINT,
