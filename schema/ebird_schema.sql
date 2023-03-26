@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS observation (
     species_code VARCHAR(16),
     user_id VARCHAR(128),
     location_id VARCHAR(16),
-    observation_date DATE,
+    observation_date DATETIME,
     observation_count SMALLINT,
 	observation_valid BOOLEAN,
     observation_reviewed BOOLEAN,
