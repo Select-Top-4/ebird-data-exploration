@@ -9,6 +9,7 @@ SELECT common_name,
        scientific_name,
        species_img_link
 FROM   species
+WHERE  species_img_link IS NOT NULL
 ORDER  BY RAND()
 LIMIT  1; 
 
@@ -22,42 +23,40 @@ to the past 30 days. i.e., if the user inputs "Pennsylvania", 1/01/2023-1/04/202
 in Pennsylvania for the date range would be returned. 
 */
 
-CREATE OR replace VIEW heatmap
-AS (
-  WITH sightings_filtered
-       AS (SELECT location_id,
-                  scientific_name,
-                  common_name,
-                  observation_count
-           FROM   observation
-                  join species
-                    ON observation.species_code = species.species_code
-           WHERE  observation_date BETWEEN '{start_date}' AND '{end_date}'
-                  AND ( '{name_input}' = common_name
-                         OR '{name_input}' = scientific_name )),
-       locations_filtered
-       AS (SELECT location_id,
-                  latitude,
-                  longitude
-           FROM   ebird_location E
-                  join subnational2 S2
-                    ON E.subnational2_code = S2.subnational2_code
-                  join subnational1 S1
-                    ON S2.subnational1_code = S1.subnational1_code
-           WHERE  ( '{location_input}' = S1.subnational1_name
-                     OR '{location_input}' = S2.subnational2_name ))
-  SELECT latitude,
-         longitude,
-         scientific_name,
-         common_name,
-         SUM(observation_count) AS total_count
-   FROM   sightings_filtered S
-          join locations_filtered L
-            ON S.location_id = L.location_id
-   GROUP  BY 1,
-             2,
-             3,
-             4) 
+WITH sightings_filtered
+     AS (SELECT location_id,
+                scientific_name,
+                common_name,
+                observation_count
+         FROM   observation
+                JOIN species
+                  ON observation.species_code = species.species_code
+         WHERE  observation_date BETWEEN '{start_date}' AND '{end_date}'
+                AND ( '{name_input}' = common_name
+                       OR '{name_input}' = scientific_name )),
+     locations_filtered
+     AS (SELECT location_id,
+                latitude,
+                longitude
+         FROM   ebird_location E
+                JOIN subnational2 S2
+                  ON E.subnational2_code = S2.subnational2_code
+                JOIN subnational1 S1
+                  ON S2.subnational1_code = S1.subnational1_code
+         WHERE  ( '{location_input}' = S1.subnational1_name
+                   OR '{location_input}' = S2.subnational2_name ))
+SELECT latitude,
+       longitude,
+       scientific_name,
+       common_name,
+       Sum(observation_count) AS total_count
+FROM   sightings_filtered S
+       JOIN locations_filtered L
+         ON S.location_id = L.location_id
+GROUP  BY 1,
+          2,
+          3,
+          4 
 
 /*
 Feature name: Top birds found by name, location, date range
@@ -66,13 +65,37 @@ Feature description: Based upon the observed bird sightings selected by the user
 bird sightings by bird name from highest to lowest count of birds
 */
 
+WITH sightings_filtered
+     AS (SELECT location_id,
+                scientific_name,
+                common_name,
+                observation_count
+         FROM   observation
+                JOIN species
+                  ON observation.species_code = species.species_code
+         WHERE  observation_date BETWEEN '{start_date}' AND '{end_date}'
+                AND ( '{name_input}' = common_name
+                       OR '{name_input}' = scientific_name )),
+     locations_filtered
+     AS (SELECT location_id,
+                latitude,
+                longitude
+         FROM   ebird_location E
+                JOIN subnational2 S2
+                  ON E.subnational2_code = S2.subnational2_code
+                JOIN subnational1 S1
+                  ON S2.subnational1_code = S1.subnational1_code
+         WHERE  ( '{location_input}' = S1.subnational1_name
+                   OR '{location_input}' = S2.subnational2_name ))
 SELECT scientific_name,
        common_name,
-       SUM(total_count) AS all_birds
-FROM   heatmap
+       Sum(observation_count) AS total_count
+FROM   sightings_filtered S
+       JOIN locations_filtered L
+         ON S.location_id = L.location_id
 GROUP  BY 1,
           2
-ORDER  BY all_birds DESC; 
+ORDER  BY all_birds DESC;
 
 /* 
 -- for the table that is returned in the feature above, we need to aggregate by bird name
