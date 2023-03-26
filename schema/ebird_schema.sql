@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS species (
     scientific_name VARCHAR(256),
     common_name VARCHAR(256),
     species_description TEXT,
-    species_img_link VARCHAR(1024),
+    species_img_link TEXT,
     extinct BOOLEAN,
     extinct_year VARCHAR(4),
     PRIMARY KEY (species_code),
