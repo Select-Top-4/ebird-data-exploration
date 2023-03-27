@@ -125,6 +125,15 @@ bird sightings by bird name from highest to lowest count of birds
 -- to test, replace start_date with "2023-01-02" and end date with "2023-03-26"
 -- replace name_input 1 with "Graylag Goose", and name_input 2 with "Anser anser"
 -- replace location_input 1 with "New York" and location_input with ""
+
+-- Example test:
+--{start_date} = 2023-01-01
+--{end_date} = 2023-01-30
+--common_name = Long-eared Owl
+--scientific_name = Asio otus
+--S1.subnational1_name = Colorado
+--S2.subnational2_name = Arapahoe
+
 WITH sightings_filtered
      AS (SELECT location_id,
                 scientific_name,
@@ -206,6 +215,8 @@ Feature description: For a particular bird family, returns the family_common_nam
 family_description, and a randomly selected image of a bird species from that family.  
 */
 
+--Replace {page_family_code} with sample family code trogon1 to see result
+
 SELECT family_code,
        family_scientific_name,
        family_common_name,
@@ -223,6 +234,8 @@ Feature name: Species within family
 Feature location: Family info page
 Feature description: For a particular bird family, returns all species with their common names in that family.
 */
+
+--Replace {page_family_code} with sample family code trogon1 to see result
 
 SELECT common_name,
        species_code
