@@ -35,40 +35,94 @@ to the past 30 days. i.e., if the user inputs "Pennsylvania", 1/01/2023-1/04/202
 in Pennsylvania for the date range would be returned. 
 */
 
-WITH sightings_filtered
-     AS (SELECT location_id,
-                scientific_name,
-                common_name,
-                observation_count
-         FROM   observation
-                JOIN species
-                  ON observation.species_code = species.species_code
-         WHERE  observation_date BETWEEN '{start_date}' AND '{end_date}'
-                AND ( '{name_input}' = common_name
-                       OR '{name_input}' = scientific_name )),
-     locations_filtered
-     AS (SELECT location_id,
-                latitude,
-                longitude
-         FROM   ebird_location E
-                JOIN subnational2 S2
-                  ON E.subnational2_code = S2.subnational2_code
-                JOIN subnational1 S1
-                  ON S2.subnational1_code = S1.subnational1_code
-         WHERE  ( '{location_input}' = S1.subnational1_name
-                   OR '{location_input}' = S2.subnational2_name ))
+/*
+Example Query That Works: 
+WITH 
+	sightings_filtered AS (
+	SELECT 
+		location_id, 
+		scientific_name,
+		common_name,
+		observation_count
+	FROM
+		observation
+	JOIN species 
+		ON observation.species_code = species.species_code
+	WHERE CAST(observation_date AS DATE)
+		BETWEEN '2023-01-01' AND '2023-03-05'
+		AND common_name = "Eastern Screech-Owl"
+		OR scientific_name = "Megascops asio"
+), 
+	locations_filtered AS (
+	SELECT 
+		location_id,
+		latitude,
+		longitude
+	FROM 
+		ebird_location E
+	JOIN subnational2 S2
+		ON E.subnational2_code = S2.subnational2_code
+	JOIN subnational1 S1
+		ON S2.subnational1_code = S1.subnational1_code
+	WHERE S1.subnational1_name = "Kansas" 
+		OR S2.subnational2_name = ""
+)
 SELECT latitude,
        longitude,
        scientific_name,
        common_name,
        Sum(observation_count) AS total_count
-FROM   sightings_filtered S
-       JOIN locations_filtered L
-         ON S.location_id = L.location_id
-GROUP  BY 1,
-          2,
-          3,
-          4 
+FROM sightings_filtered S
+JOIN locations_filtered L
+	ON S.location_id = L.location_id
+GROUP BY 1,
+         2,
+         3,
+         4;
+*/
+
+WITH 
+	sightings_filtered AS (
+	SELECT 
+		location_id, 
+		scientific_name,
+		common_name,
+		observation_count
+	FROM
+		observation
+	JOIN species 
+		ON observation.species_code = species.species_code
+	WHERE CAST(observation_date AS DATE)
+		BETWEEN '{start_date}' AND '{end_date}'
+		AND common_name = '{common_name}'
+		OR scientific_name = '{scientific_name}'
+), 
+	locations_filtered AS (
+	SELECT 
+		location_id,
+		latitude,
+		longitude
+	FROM 
+		ebird_location E
+	JOIN subnational2 S2
+		ON E.subnational2_code = S2.subnational2_code
+	JOIN subnational1 S1
+		ON S2.subnational1_code = S1.subnational1_code
+	WHERE S1.subnational1_name = '{subnational1_name}'
+		OR S2.subnational2_name = ""
+)
+SELECT latitude,
+       longitude,
+       scientific_name,
+       common_name,
+       Sum(observation_count) AS total_count
+FROM sightings_filtered S
+JOIN locations_filtered L
+	ON S.location_id = L.location_id
+GROUP BY 1,
+	  2,
+	  3,
+	  4;
 
 /*
 Feature name: Top birds found by name, location, date range
