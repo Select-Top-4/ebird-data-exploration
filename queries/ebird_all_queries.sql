@@ -1,12 +1,13 @@
 /* 
 Feature name: Bird of the day
 Feature location: Home page
-Feature description: Returns a random bird species (common_name, scientific_name, species_img)
-from the species table. This will be shown in the "Have you seen the ... today?" feature (1) 
+Feature description: Returns a random bird species and description (common_name, scientific_name, species_description, species_img)
+from the species table. This will be shown in the "Have you seen the ... today?" feature 
 */
 
 SELECT common_name,
        scientific_name,
+       species_description,
        species_img_link
 FROM   species
 WHERE  species_img_link IS NOT NULL
