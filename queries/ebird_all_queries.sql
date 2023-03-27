@@ -12,6 +12,7 @@ SELECT common_name,
 FROM   species
 WHERE  common_name IS NOT NULL
        AND scientific_name IS NOT NULL
+       AND species_description IS NOT NULL
        AND species_img_link IS NOT NULL
 ORDER  BY RAND()
 LIMIT  1; 
