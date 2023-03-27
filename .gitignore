@@ -1,5 +1,8 @@
 .vscode
 *.csv
-.DStore
+.DS_Store
 decomposed
 input
+*.xlsx
+*.xls
+dump

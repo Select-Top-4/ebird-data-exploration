@@ -5,7 +5,7 @@ import requests
 import sys
 
 # Get family descriptions and output to csv, script takes a command line arg for file output name
-# Run like this:         python family_scraper.py family_descriptions.csv
+# Run like this:         python scrapers/family_scraper.py family_descriptions.csv
 
 def scrapeFamily(family_url):
     """Scrape family description from wiki"""
