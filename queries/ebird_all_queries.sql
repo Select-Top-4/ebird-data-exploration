@@ -112,9 +112,9 @@ FROM sightings_filtered S
 JOIN locations_filtered L
 	ON S.location_id = L.location_id
 GROUP BY 1,
-	  2,
-	  3,
-	  4;
+	 2,
+	 3,
+	 4;
 
 /*
 Feature name: Top birds found by name, location, date range
