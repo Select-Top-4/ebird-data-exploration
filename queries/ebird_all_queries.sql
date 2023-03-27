@@ -181,7 +181,9 @@ Feature description: For a particular bird family, returns bird sightings within
 on the heat map. If no date range is provided, returns sightings over the past 30 days. Each species is 
 visualized using a different color on the heatmap 
 */
-
+-- to try out try replacing where clause with:
+-- WHERE  observation_date BETWEEN "2022-12-01" AND "2023-03-26"
+       -- AND family_code = "haemat1"
 SELECT latitude,
        longitude,
        scientific_name,
