@@ -68,7 +68,9 @@ Feature location: Home page
 Feature description: Based upon the observed bird sightings selected by the user, aggregate and return
 bird sightings by bird name from highest to lowest count of birds
 */
-
+-- to test, replace start_date with "2023-01-02" and end date with "2023-03-26"
+-- replace name_input 1 with "Graylag Goose", and name_input 2 with "Anser anser"
+-- replace location_input 1 with "New York" and location_input with ""
 WITH sightings_filtered
      AS (SELECT location_id,
                 scientific_name,
