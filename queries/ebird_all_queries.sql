@@ -5,17 +5,25 @@ Feature description: Returns a random bird species and description (common_name,
 from the species table. This will be shown in the "Have you seen the ... today?" feature 
 */
 
-SELECT common_name,
-       scientific_name,
-       species_description,
-       species_img_link
-FROM   species
-WHERE  common_name IS NOT NULL
-       AND scientific_name IS NOT NULL
-       AND species_description IS NOT NULL
-       AND species_img_link IS NOT NULL
-ORDER  BY RAND()
-LIMIT  1; 
+SELECT s.common_name,
+       s.scientific_name,
+       s.species_description,
+       s.species_img_link,
+       f.family_scientific_name,
+       f.family_common_name,
+       f.family_description
+FROM species s
+INNER JOIN family f
+	ON s.family_code = f.family_code
+WHERE s.common_name IS NOT NULL
+       AND s.scientific_name IS NOT NULL
+       AND s.species_description IS NOT NULL
+       AND s.species_img_link IS NOT NULL
+       AND f.family_scientific_name IS NOT NULL
+       AND f.family_common_name IS NOT NULL
+       AND f.family_description IS NOT NULL
+ORDER BY RAND()
+LIMIT 1; 
 
 /* 
 Feature name: Heat map of bird observations by name, location, and date range
