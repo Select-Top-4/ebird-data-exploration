@@ -4,6 +4,8 @@ import re
 import requests
 import sys
 
+# Get family descriptions and output to csv, script takes a command line arg for file output name
+# Run like this:         python scrapers/family_scraper.py family_descriptions.csv
 
 def scrapeFamily(family_url):
     """Scrape family description from wiki"""
@@ -22,7 +24,7 @@ def extractDescription(d):
     clean = re.compile('<.*?>|\[.*?\]')
     return re.sub(clean, '', d)
 
-# main
+
 
 # output file is arg 1
 csv_name = sys.argv[1]
@@ -49,5 +51,5 @@ with open(csv_name, 'w', newline='') as csvfile:
                 w = csv.writer(csvfile, delimiter=',')
                 w.writerow([family, extracted_description])
         except:
+            #oops
             continue
-
